@@ -6,10 +6,12 @@ function AddUsuario(props) {
   const [email, setEmail] = useState("");
 
 const headers = { headers: {Authorization: "giovanni-souza-krexu"}}
-  const body = {
-    name: nome,
-    email: email
-  }
+
+
+const body = {
+  name: nome,
+  email: email
+}
   const createUser = () => {
     axios.post("https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users", body, headers)
     .then(()=>{

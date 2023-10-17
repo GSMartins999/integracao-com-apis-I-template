@@ -15,14 +15,18 @@ function Usuario(props) {
   const [email, setEmail] = useState("");
   const [editar, setEditar] = useState(false);
    
+
+  //Podemos criar o body, headers, fora das funções do axios, tornando assim a função mais simplificada e sem precisar repetir conteúdo.
   const body = {
     name: nome,
     email: email
   }
 
   const headers = {headers: {Authorization: "giovanni-souza-krexu"}}
+
+
   const getUserById = () => {
-    axios.get(`https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`, headers)
+    axios.get(`https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`, headers, body)
     .then((response) => {
       setUsuario(response.data)
     })
@@ -30,24 +34,27 @@ function Usuario(props) {
       console.log(error.response)
     })
   }
+
+  useEffect(()=>{
+    getUserById()
+  })
+
   const editarUser = () => {
-    axios.put(`https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`, body, { headers: {Authorization: "giovanni-souza-krexu"}})
+    axios.put(`https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`, body, headers)
     .then(()=>{
+      setNome("");
+      setEmail("");
       alert("Alteração feita com sucesso!!")
-      setNome("")
-      setEmail("")
+      setEditar(!editar)
       props.getAllUsers()
     })
     .catch((error) => {
       console.log(error.response)
     })
   }
-  useEffect(() => {
-    getUserById()
-  }, [])
 
   const excluirUser = () => {
-    axios.delete(`https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`, { headers: {Authorization: "giovanni-souza-krexu"}})
+    axios.delete(`https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`, headers)
     .then(()=>{
       alert("Excluido com sucesso!!")
       props.getAllUsers()
@@ -56,10 +63,8 @@ function Usuario(props) {
       console.log(error.response)
     })
   }
-  useEffect(() => {
-    getUserById()
-  }, [])
 
+  
   
   return (
     <User>
